@@ -4,14 +4,15 @@
  * @Author: 程
  * @Date: 2026-04-10 10:28:59
  * @LastEditors: 程
- * @LastEditTime: 2026-04-10 11:06:39
+ * @LastEditTime: 2026-04-21 09:33:03
 -->
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router';
 </script>
 
 <template>
-  <div class="relative min-h-screen overflow-hidden bg-abyss text-white">
+  <div class="min-h-screen overflow-hidden bg-abyss text-white relative">
+    <video src="/src/assets/bg.mp4" poster="/src/assets/bg.webp" autoplay loop muted class="absolute inset-0 w-full h-full object-cover"></video>
     <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(124,246,255,0.18),_transparent_28%),radial-gradient(circle_at_80%_20%,_rgba(192,132,252,0.18),_transparent_24%),radial-gradient(circle_at_50%_80%,_rgba(255,138,91,0.2),_transparent_26%)]" />
     <div class="absolute inset-0 bg-grid bg-[size:42px_42px] opacity-20" />
     <div class="absolute left-[-8rem] top-20 h-72 w-72 rounded-full bg-cyan-400/20 blur-3xl animate-drift" />
