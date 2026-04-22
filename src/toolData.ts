@@ -4,7 +4,7 @@
  * @Author: 程
  * @Date: 2025-08-30 14:16:39
  * @LastEditors: 程
- * @LastEditTime: 2026-03-26 14:37:11
+ * @LastEditTime: 2026-04-22 09:14:03
  */
 import { ref } from 'vue';
 const newToolItems: any = ref({
@@ -52,7 +52,7 @@ const newToolItems: any = ref({
       { id: 4, text: 'NutUI Bingo', introduction: '京东NutUI的抽奖组件库,营销活动和小游戏场景。', url: 'https://nutui.jd.com/bingo/#/' },
       { id: 5, text: 'Uview', introduction: '全面兼容nvue的uni-app生态框架', url: 'https://www.uviewui.com/' },
       { id: 6, text: 'Uview-plus', introduction: 'uviewPlus是基于uView修改的vue3版本', url: 'https://uiadmin.net/uview-plus/components/intro.html' },
-      { id: 11, text: 'Uview-pro', introduction: 'uviewPro是基于uView修改的vue3版本', url: 'https://www.anyup.cn/docs/' },
+      { id: 11, text: 'Uview-pro', introduction: 'uviewPro是基于uView修改的vue3版本', url: 'https://uviewpro.cn/' },
       { id: 7, text: 'uv-ui/类似uview-plus', introduction: 'uviewPlus是基于uView2修改的vue3版本', url: 'https://www.uvui.cn/' },
       { id: 8, text: 'Taro UI', introduction: '一套基于 Taro 框架开发的多端 UI 组件库', url: 'https://taro-ui.jd.com/#/' },
       { id: 9, text: 'Wot Design Uni', introduction: '高颜值、轻量化的uni-app组件库', url: 'https://wot-design-uni.pages.dev/' },
