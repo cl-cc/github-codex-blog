@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { BorderBeam } from 'border-beam-vue3';
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import Fuse from 'fuse.js';
 import { newToolItems } from '../toolData';
@@ -149,16 +150,18 @@ onUnmounted(() => window.removeEventListener('keydown', onGlobalKeydown));
             <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.2-5.2M11 18a7 7 0 100-14 7 7 0 000 14z" />
           </svg>
         </span>
-        <input
-          ref="searchInputRef"
-          v-model="searchQuery"
-          type="search"
-          enterkeyhint="search"
-          autocomplete="off"
-          placeholder="搜索名称、简介、分类…（按 / 聚焦）"
-          :class="['w-full rounded-2xl border-2 border-white/40 bg-white/[0.06] py-3.5 pl-12 text-sm text-[#303133] placeholder:text-[#303133] backdrop-blur-md transition focus:border-white/55 focus:outline-none focus:ring-2 focus:ring-white/25', isSearchActive ? 'pr-36 sm:pr-40' : 'pr-24']"
-          @keydown="onSearchKeydown"
-        />
+        <BorderBeam>
+          <input
+            ref="searchInputRef"
+            v-model="searchQuery"
+            type="search"
+            enterkeyhint="search"
+            autocomplete="off"
+            placeholder="搜索名称、简介、分类…（按 / 聚焦）"
+            :class="['w-full rounded-2xl border-2 border-white/40 bg-white/[0.06] py-3.5 pl-12 text-sm text-[#303133] placeholder:text-[#303133] backdrop-blur-md transition focus:border-white/55 focus:outline-none focus:ring-2 focus:ring-white/25', isSearchActive ? 'pr-36 sm:pr-40' : 'pr-24']"
+            @keydown="onSearchKeydown"
+          />
+        </BorderBeam>
         <div v-if="!isSearchActive" class="pointer-events-none absolute right-3 top-1/2 flex -translate-y-1/2 items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-[#303133]">
           <kbd class="pointer-events-none hidden rounded-md border border-white/15 bg-white/[0.06] px-1.5 py-0.5 font-sans text-[#303133] sm:inline">esc</kbd>
         </div>
