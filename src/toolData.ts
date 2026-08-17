@@ -40,6 +40,7 @@ const newToolItems: any = ref({
       { id: 12, text: 'Taro', introduction: 'Taro 是一个开放式跨端跨框架解决方案', url: 'https://taro-docs.jd.com/docs/' },
       { id: 4, text: 'Bootstrap', introduction: '简洁、直观、强悍的前端开发框架', url: 'https://www.bootcss.com/' },
       { id: 45, text: 'Ant-design-x', introduction: 'AI 体验新秩序插件,快速搭建AI聊天组件', url: 'https://ant-design-x.antgroup.com/index-cn' },
+      { id: 46, text: 'Element-Plus-X', introduction: 'Vue3 生成式 AI 组件库，开箱即用的企业级 AI 交互组件', url: 'https://element-plus-x.com/zh/' },
     ],
   },
   mobileUi: {
@@ -169,6 +170,7 @@ const newToolItems: any = ref({
       { id: 4, text: 'Yesicon', introduction: '157 组开源、免费的图标库', url: 'https://yesicon.app/' },
       { id: 2, text: '700 + CSS Icons', introduction: '纯css的icons', url: 'https://css.gg/' },
       { id: 2, text: 'Iconpark', introduction: '字节跳动出品，将一个SVG图标转化为多个主题', url: 'https://iconpark.oceanengine.com/home' },
+      { id: 5, text: 'Iconsax', introduction: '多风格 SVG 图标库，可在线浏览和导出', url: 'https://app.iconsax.io/' },
     ],
   },
   interview: {
@@ -202,6 +204,15 @@ const newToolItems: any = ref({
       { id: 16, text: 'bolt', introduction: '可以cv网站的大模型-1', url: 'https://bolt.new/' },
       { id: 17, text: 'Readdy', introduction: '可以cv网站的大模型-2', url: 'https://readdy.ai/home/b04cfb3c-8568-4042-8f88-6458b19ea441' },
       { id: 18, text: 'fluxBahew', introduction: '免费在线照片艺术化处理', url: 'https://flux.bahew.com/zh-CN' },
+      { id: 19, text: 'Fish Audio', introduction: 'AI 文字转语音和语音克隆', url: 'https://fish.audio/zh-CN/app/' },
+    ],
+  },
+  skill: {
+    text: 'Agent Skills',
+    isExpand: false,
+    items: [
+      { id: 1, text: 'Skills', introduction: '开放的 Agent Skills 目录，一条命令给 AI 代理装上可复用能力', url: 'https://www.skills.sh/' },
+      { id: 2, text: 'Taste Skill', introduction: '给 AI 编程代理用的前端反模板技能框架', url: 'https://www.tasteskill.dev/' },
     ],
   },
   learningRoute: {
@@ -237,6 +248,7 @@ const newToolItems: any = ref({
       { id: 18, text: 'moovie', introduction: '影视网站', url: 'https://moovie.c2v2.com/' },
       { id: 18, text: 'x video downloader', introduction: 'x视频下载', url: 'https://x-twitter-downloader.com/' },
       { id: 18, text: 'convertio', introduction: '文件转换器', url: 'https://convertio.co/zh/' },
+      { id: 20, text: 'remove.bg', introduction: '在线抠图，自动去除图片背景', url: 'https://www.remove.bg/zh' },
     ],
   },
   website: {

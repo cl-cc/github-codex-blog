@@ -27,6 +27,7 @@ const shortLabels: Record<string, string> = {
   iconFont: '图标',
   interview: '面试',
   ai: 'AI',
+  skill: 'Skills',
   learningRoute: '其他',
   website: '收藏',
 };
