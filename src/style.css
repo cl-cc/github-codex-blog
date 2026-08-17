@@ -1,32 +1,56 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/*
+  z-index
+  10  sticky header
+  20  skip-link (focused)
+  30  grain overlay
+*/
+
 :root {
+  color-scheme: light;
+  --bg: #f3f4f5;
+  --bg-elevated: #ffffff;
+  --ink: #1c1d20;
+  --muted: #5a5d64;
+  --line: #d4d6da;
+  --accent: #9e3421;
+  --accent-fg: #f7f4f1;
+  --radius-control: 8px;
+  --radius-box: 12px;
+  --header-h: 64px;
+}
+
+.dark {
   color-scheme: dark;
-  font-family: 'Space Grotesk', sans-serif;
-  background:
-    radial-gradient(circle at top, rgba(124, 246, 255, 0.16), transparent 25%),
-    linear-gradient(180deg, #050816 0%, #090d1d 48%, #04050b 100%);
-  background-color: #050816;
-  color: #ffffff;
+  --bg: #161718;
+  --bg-elevated: #1e1f21;
+  --ink: #ececee;
+  --muted: #9b9da4;
+  --line: #2d2f33;
+  --accent: #e0705a;
+  --accent-fg: #161718;
 }
 
 html {
   scroll-behavior: smooth;
+  background: var(--bg);
 }
 
 body {
   margin: 0;
   min-width: 320px;
-  min-height: 100vh;
-  background: transparent;
+  min-height: 100dvh;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Outfit Variable', Outfit, 'PingFang SC', 'Hiragino Sans GB', 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
+  font-optical-sizing: auto;
 }
 
 #app {
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 * {
@@ -34,6 +58,90 @@ body {
 }
 
 ::selection {
-  background: rgba(124, 246, 255, 0.25);
-  color: #fff;
+  background: var(--accent);
+  color: var(--accent-fg);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 20;
+  border-radius: var(--radius-control);
+  background: var(--ink);
+  color: var(--bg);
+  padding: 0.5rem 0.9rem;
+}
+
+.skip-link:focus {
+  top: 0.75rem;
+}
+
+.site-header {
+  height: var(--header-h);
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+}
+
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+.dark .grain {
+  opacity: 0.055;
+  mix-blend-mode: overlay;
+}
+
+.text-on-accent {
+  color: color-mix(in srgb, var(--accent-fg) 82%, transparent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .reveal.is-in {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+
+  .group:hover img {
+    transform: none !important;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .site-header {
+    background: var(--bg);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
 }

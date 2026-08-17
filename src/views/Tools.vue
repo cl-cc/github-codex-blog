@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { BorderBeam } from 'border-beam-vue3';
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import Fuse from 'fuse.js';
+import { PhArrowUpRight, PhCaretDown, PhMagnifyingGlass, PhX } from '@phosphor-icons/vue';
 import { newToolItems } from '../toolData';
 
 type ToolBlock = {
@@ -18,19 +18,30 @@ type SearchableItem = ToolItem & {
   categoryTitle: string;
 };
 
-const accents = ['from-cyan-400/60 via-sky-400/30 to-transparent', 'from-fuchsia-400/60 via-violet-400/30 to-transparent', 'from-orange-400/60 via-rose-400/30 to-transparent', 'from-emerald-400/60 via-teal-400/30 to-transparent'];
+const shortLabels: Record<string, string> = {
+  frame: '框架',
+  webUi: 'Web UI',
+  mobileUi: '移动',
+  visual: '可视化',
+  plugin: '插件',
+  iconFont: '图标',
+  interview: '面试',
+  ai: 'AI',
+  learningRoute: '其他',
+  website: '收藏',
+};
 
 const searchQuery = ref('');
 const searchInputRef = ref<HTMLInputElement | null>(null);
 
 const sections = computed(() => {
   const data = newToolItems.value as Record<string, ToolBlock>;
-  return Object.entries(data).map(([key, block], i) => ({
+  return Object.entries(data).map(([key, block]) => ({
     key,
     title: block.text,
+    short: shortLabels[key] ?? block.text,
     isExpand: block.isExpand,
     items: block.items,
-    accent: accents[i % accents.length],
   }));
 });
 
@@ -124,93 +135,144 @@ function onGlobalKeydown(e: KeyboardEvent) {
   }
 }
 
+function scrollToSection(key: string) {
+  const el = document.getElementById(`cat-${key}`);
+  if (!el) return;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+}
+
 onMounted(() => window.addEventListener('keydown', onGlobalKeydown));
 onUnmounted(() => window.removeEventListener('keydown', onGlobalKeydown));
 </script>
 
 <template>
-  <div class="pb-8 pt-4">
-    <section class="mb-10">
-      <div class="mb-6 inline-flex items-center gap-3 rounded-full border border-neon/30 bg-neon/10 px-4 py-2 text-xs uppercase tracking-[0.35em] text-[#303133]">
-        <span class="relative inline-flex h-3 w-3">
-          <span class="absolute inline-flex h-full w-full rounded-full bg-neon animate-pulseRing"></span>
-          <span class="relative inline-flex h-3 w-3 rounded-full bg-neon"></span>
-        </span>
-        Toolbox
-      </div>
-      <h1 class="font-display text-4xl uppercase leading-tight sm:text-5xl lg:text-6xl text-[#303133]">
-        前端
-        <span class="bg-[linear-gradient(90deg,#7cf6ff_0%,#d8e7ff_45%,#ff8a5b_100%)] bg-clip-text text-transparent">工具库</span>
-      </h1>
-      <p class="mt-4 max-w-2xl text-base leading-8 text-[#303133] sm:text-lg">收录常用框架文档、UI 库、插件与可视化资源，数据来自个人收藏清单，点击分类标题可展开 / 收起。</p>
+  <div class="pt-10 lg:pt-16">
+    <section class="max-w-2xl">
+      <h1 class="text-4xl font-medium tracking-tight text-ink sm:text-5xl">前端工具库</h1>
+      <p class="mt-4 max-w-[65ch] text-base leading-relaxed text-muted">
+        常用框架文档、UI 库、插件和可视化资源。点分类标题可展开或收起。
+      </p>
 
-      <div class="relative mt-8 max-w-xl">
-        <span class="pointer-events-none absolute left-4 top-1/2 z-10 -translate-y-1/2 text-[#303133]" aria-hidden="true">
-          <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.2-5.2M11 18a7 7 0 100-14 7 7 0 000 14z" />
-          </svg>
-        </span>
-        <BorderBeam>
+      <div class="mt-8 flex flex-col gap-2">
+        <label for="tool-search" class="text-sm text-ink">搜索</label>
+        <div class="relative">
+          <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-muted" aria-hidden="true">
+            <PhMagnifyingGlass :size="20" weight="regular" />
+          </span>
           <input
+            id="tool-search"
             ref="searchInputRef"
             v-model="searchQuery"
             type="search"
             enterkeyhint="search"
             autocomplete="off"
-            placeholder="搜索名称、简介、分类…（按 / 聚焦）"
-            :class="['w-full rounded-2xl border-2 border-white/40 bg-white/[0.06] py-3.5 pl-12 text-sm text-[#303133] placeholder:text-[#303133] backdrop-blur-md transition focus:border-white/55 focus:outline-none focus:ring-2 focus:ring-white/25', isSearchActive ? 'pr-36 sm:pr-40' : 'pr-24']"
+            placeholder="名称、简介或分类"
+            class="w-full rounded-sm border border-line bg-elevated py-3.5 pl-11 text-[15px] text-ink placeholder:text-muted transition focus:border-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            :class="isSearchActive ? 'pr-24' : 'pr-16'"
             @keydown="onSearchKeydown"
           />
-        </BorderBeam>
-        <div v-if="!isSearchActive" class="pointer-events-none absolute right-3 top-1/2 flex -translate-y-1/2 items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-[#303133]">
-          <kbd class="pointer-events-none hidden rounded-md border border-white/15 bg-white/[0.06] px-1.5 py-0.5 font-sans text-[#303133] sm:inline">esc</kbd>
+          <button
+            v-if="isSearchActive"
+            type="button"
+            class="absolute right-2 top-1/2 inline-flex -translate-y-1/2 items-center gap-1 rounded-sm px-2 py-1 text-sm text-muted transition hover:text-ink active:scale-[0.98]"
+            @click="clearSearch"
+          >
+            <PhX :size="16" weight="regular" />
+            清除
+          </button>
+          <kbd
+            v-else
+            class="pointer-events-none absolute right-3 top-1/2 hidden -translate-y-1/2 rounded-sm border border-line px-1.5 py-0.5 text-xs text-muted sm:inline"
+          >
+            /
+          </kbd>
         </div>
-        <button v-if="isSearchActive" type="button" class="absolute right-3 top-1/2 z-10 -translate-y-1/2 rounded-full border border-white/15 bg-white/[0.08] px-3 py-1 text-xs uppercase tracking-[0.18em] text-[#303133] transition hover:border-neon/40" @click="clearSearch">清除</button>
+        <p class="text-sm text-muted">按 / 聚焦搜索框。</p>
       </div>
-      <p v-if="isSearchActive" class="mt-3 text-sm text-[#303133]">
-        找到 <span class="font-medium text-[#303133]">{{ totalMatchCount }}</span> 条相关链接
+
+      <p v-if="isSearchActive" class="mt-4 text-sm text-muted">
+        找到 <span class="text-ink">{{ totalMatchCount }}</span> 条相关链接
         <span v-if="totalMatchCount === 0">，试试其它关键词</span>
       </p>
     </section>
 
-    <div v-if="isSearchActive && totalMatchCount === 0" class="rounded-[1.75rem] border border-white/10 bg-white/[0.04] px-6 py-14 text-center backdrop-blur-md">
-      <p class="text-sm uppercase tracking-[0.28em] text-[#303133]">No results</p>
-      <p class="mt-3 text-lg font-medium text-[#303133]">没有匹配的工具</p>
-      <p class="mt-2 text-sm text-[#303133]">调整关键词，或点击「清除」返回完整列表。</p>
+    <nav v-if="!isSearchActive" class="mt-10 -mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0" aria-label="工具分类">
+      <ul class="flex w-max gap-2 pb-1 snap-x">
+        <li v-for="section in sections" :key="section.key" class="snap-start">
+          <button
+            type="button"
+            class="rounded-sm border border-line bg-elevated px-3 py-1.5 text-sm text-ink transition hover:border-ink active:scale-[0.98]"
+            @click="scrollToSection(section.key)"
+          >
+            {{ section.short }}
+          </button>
+        </li>
+      </ul>
+    </nav>
+
+    <div
+      v-if="isSearchActive && totalMatchCount === 0"
+      class="mt-14 max-w-xl rounded-md border border-line bg-elevated px-6 py-14"
+    >
+      <p class="text-lg font-medium text-ink">没有匹配的工具</p>
+      <p class="mt-2 text-sm leading-relaxed text-muted">换个词再搜，或清除后看完整列表。</p>
+      <button
+        type="button"
+        class="mt-6 inline-flex items-center rounded-sm bg-ink px-4 py-2 text-sm font-medium text-canvas transition hover:bg-accent hover:text-accent-fg active:scale-[0.98]"
+        @click="clearSearch"
+      >
+        清除
+      </button>
     </div>
 
-    <div v-else class="space-y-5">
-      <article v-for="section in activeSections" :key="section.key" class="group relative overflow-hidden rounded-[1.75rem] border-2 border-white/40 bg-white/[0.06] backdrop-blur-md transition duration-300 hover:border-white/55">
-        <div class="absolute inset-0 bg-gradient-to-br opacity-50 transition duration-300 group-hover:opacity-70" :class="section.accent"></div>
-        <div class="absolute right-6 top-6 h-24 w-24 rounded-full border border-white/10 bg-white/5 blur-2xl"></div>
+    <div v-else class="mt-8">
+      <article
+        v-for="section in activeSections"
+        :id="`cat-${section.key}`"
+        :key="section.key"
+        class="scroll-mt-24 border-b border-line py-2"
+      >
+        <button
+          v-if="!isSearchActive"
+          type="button"
+          class="flex w-full items-center justify-between gap-4 py-5 text-left"
+          :aria-expanded="section.isExpand"
+          @click="toggle(section.key)"
+        >
+          <span>
+            <h2 class="text-xl font-medium tracking-tight text-ink sm:text-2xl">{{ section.title }}</h2>
+            <span class="mt-1 block text-sm text-muted">{{ section.items.length }}</span>
+          </span>
+          <PhCaretDown
+            :size="20"
+            weight="regular"
+            class="shrink-0 text-muted transition"
+            :class="section.isExpand ? 'rotate-180' : ''"
+          />
+        </button>
 
-        <div class="relative">
-          <button v-if="!isSearchActive" type="button" class="flex w-full items-center justify-between gap-4 px-6 py-5 text-left sm:px-8" @click="toggle(section.key)">
-            <div>
-              <p class="text-xs uppercase tracking-[0.3em] text-[#303133]">Category</p>
-              <h2 class="mt-2 text-xl font-semibold text-[#303133] sm:text-2xl">{{ section.title }}</h2>
-            </div>
-            <span class="shrink-0 rounded-full border border-white/15 bg-slate-950/50 px-3 py-1 text-xs uppercase tracking-[0.2em] text-[#fff]">
-              {{ section.isExpand ? '收起' : '展开' }}
-            </span>
-          </button>
+        <div v-else class="flex w-full items-center justify-between gap-4 py-5">
+          <h2 class="text-xl font-medium tracking-tight text-ink sm:text-2xl">{{ section.title }}</h2>
+          <span class="text-sm text-muted">{{ section.items.length }}</span>
+        </div>
 
-          <div v-else class="flex w-full items-center justify-between gap-4 px-6 py-5 sm:px-8">
-            <div>
-              <p class="text-xs uppercase tracking-[0.3em] text-[#303133]">Category</p>
-              <h2 class="mt-2 text-xl font-semibold text-[#303133] sm:text-2xl">{{ section.title }}</h2>
-            </div>
-            <span class="shrink-0 rounded-full border border-neon/25 bg-neon/10 px-3 py-1 text-xs uppercase tracking-[0.2em] text-[#303133]"> {{ section.items.length }} 条匹配 </span>
-          </div>
-
-          <div v-show="isSearchActive || section.isExpand" class="border-t border-white/30 px-6 pb-6 pt-2 sm:px-8">
-            <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              <a v-for="(link, idx) in section.items" :key="`${section.key}-${link.id}-${idx}`" :href="link.url" target="_blank" rel="noopener noreferrer" class="flex flex-col rounded-2xl border border-white/30 bg-white/[0.04] px-4 py-3 transition hover:border-neon/50 hover:bg-white/[0.07]">
-                <span class="text-sm font-medium text-[#303133]">{{ link.text || link.introduction }}</span>
-                <span class="mt-1 line-clamp-2 text-xs leading-relaxed text-[#303133]">{{ link.introduction }}</span>
-                <span class="mt-2 text-[10px] uppercase tracking-[0.2em] text-[#303133]">Open ↗</span>
-              </a>
-            </div>
+        <div v-show="isSearchActive || section.isExpand" class="pb-8">
+          <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <a
+              v-for="(link, idx) in section.items"
+              :key="`${section.key}-${link.id}-${idx}`"
+              :href="link.url"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group flex flex-col rounded-sm border border-line bg-elevated px-4 py-3 transition hover:border-ink active:scale-[0.99]"
+            >
+              <span class="flex items-start justify-between gap-3">
+                <span class="text-[15px] font-medium text-ink">{{ link.text || link.introduction }}</span>
+                <PhArrowUpRight :size="16" weight="regular" class="mt-0.5 shrink-0 text-muted transition group-hover:text-accent" />
+              </span>
+              <span class="mt-1 line-clamp-2 text-sm leading-relaxed text-muted">{{ link.introduction }}</span>
+            </a>
           </div>
         </div>
       </article>

@@ -1,42 +1,36 @@
 export default {
+    darkMode: 'class',
     content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
     theme: {
         extend: {
             colors: {
-                abyss: '#060816',
-                neon: '#7cf6ff',
-                flare: '#ff8a5b',
-                pulse: '#c084fc',
-                mist: '#d8e7ff',
+                canvas: 'var(--bg)',
+                elevated: 'var(--bg-elevated)',
+                ink: 'var(--ink)',
+                muted: 'var(--muted)',
+                line: 'var(--line)',
+                accent: 'var(--accent)',
+                'accent-fg': 'var(--accent-fg)',
             },
-            boxShadow: {
-                glow: '0 0 0 1px rgba(124, 246, 255, 0.15), 0 24px 80px rgba(0, 0, 0, 0.45)',
-            },
-            backgroundImage: {
-                grid: 'linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px)',
-            },
-            keyframes: {
-                float: {
-                    '0%, 100%': { transform: 'translateY(0px)' },
-                    '50%': { transform: 'translateY(-12px)' },
-                },
-                pulseRing: {
-                    '0%': { transform: 'scale(0.95)', opacity: '0.5' },
-                    '100%': { transform: 'scale(1.08)', opacity: '0' },
-                },
-                drift: {
-                    '0%, 100%': { transform: 'translate3d(0, 0, 0)' },
-                    '50%': { transform: 'translate3d(16px, -16px, 0)' },
-                },
-            },
-            animation: {
-                float: 'float 6s ease-in-out infinite',
-                pulseRing: 'pulseRing 3.2s ease-out infinite',
-                drift: 'drift 12s ease-in-out infinite',
+            borderRadius: {
+                sm: '8px',
+                DEFAULT: '12px',
+                md: '12px',
+                lg: '12px',
             },
             fontFamily: {
-                display: ['"Bebas Neue"', 'sans-serif'],
-                sans: ['"Space Grotesk"', 'sans-serif'],
+                sans: [
+                    '"Outfit Variable"',
+                    'Outfit',
+                    '"PingFang SC"',
+                    '"Hiragino Sans GB"',
+                    '"Noto Sans SC"',
+                    '"Microsoft YaHei"',
+                    'sans-serif',
+                ],
+            },
+            maxWidth: {
+                page: '1400px',
             },
         },
     },
